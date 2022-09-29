@@ -5,6 +5,7 @@ import HelloWorld from "./components/HelloWorld.vue";
 import cloudbase from "@cloudbase/js-sdk";
 import { provide } from "vue";
 import { TCB_APP } from "./InjectKeys";
+import ApexMap from "./components/ApexMap.vue";
 
 const {
   TCB_ENV_ID = import.meta.env.VITE_TCB_ENV_ID,
@@ -24,7 +25,11 @@ provide(TCB_APP, tcb);
 </script>
 
 <template>
-  <HelloWorld />
+  <ApexMap
+    :map-image-uri="'Kings_Canyon_MU4.webp'"
+    :map-width="2048"
+    :map-height="2048"
+  />
 </template>
 
 <style scoped></style>

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@cloudbase/js-sdk": "^1.7.2",
+    "mathjs": "^11.2.1",
     "vue": "^3.2.37"
   },
   "devDependencies": {
