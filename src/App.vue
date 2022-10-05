@@ -1,11 +1,12 @@
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import HelloWorld from "./components/HelloWorld.vue";
 import cloudbase from "@cloudbase/js-sdk";
 import { provide } from "vue";
 import { TCB_APP } from "./InjectKeys";
-import ApexMap from "./components/ApexMap.vue";
+import { RouterView } from "vue-router";
+import ApexPointer from "./components/ApexPointer.vue";
+import Navigator from "./components/Navigator.vue";
 
 const {
   TCB_ENV_ID = import.meta.env.VITE_TCB_ENV_ID,
@@ -25,11 +26,9 @@ provide(TCB_APP, tcb);
 </script>
 
 <template>
-  <ApexMap
-    :map-image-uri="'Kings_Canyon_MU4.webp'"
-    :map-width="2048"
-    :map-height="2048"
-  />
+  <router-view />
+  <Navigator />
+  <ApexPointer />
 </template>
 
 <style scoped></style>

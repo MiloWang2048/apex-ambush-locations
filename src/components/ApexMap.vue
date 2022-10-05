@@ -1,13 +1,18 @@
 <script setup lang="ts">
 import { computed, ref, watchEffect } from "vue";
 import * as math from "mathjs";
+import { useRoute } from "vue-router";
+import { DefaultMap, Maps } from "../libs/constants";
+import { ApexMap, ApexMapName } from "../types";
 
-const { mapImageUri, mapWidth, mapHeight, scaleSpeed } = defineProps({
-  mapImageUri: { type: String, required: true },
-  mapWidth: { type: Number, required: true },
-  mapHeight: { type: Number, required: true },
-  scaleSpeed: { type: Number, default: 0.0015 },
+const map = ref<ApexMap>(Maps.kings_canyon);
+const route = useRoute();
+
+watchEffect(() => {
+  map.value = Maps[route.params.map as ApexMapName] || DefaultMap;
 });
+
+const scaleSpeed = 0.0015;
 
 type ViewBox = {
   /**
@@ -28,17 +33,19 @@ const canvas = ref<SVGSVGElement>();
 const canvasWidth = ref(1);
 function initViewBox() {
   if (!canvas.value) return;
-  const initScale = mapHeight / canvas.value.clientHeight;
+  const initScale = map.value.height / canvas.value.clientHeight;
   viewBox.value.rect = math.multiply(
     [canvas.value.clientWidth, canvas.value.clientHeight],
     initScale
   ) as [number, number];
-  // if you directly assign value to viewBox.value.offset[0],
+  // if you directly assign value to viewBox.value.offset[0] like:
+  // viewBox.value.offset[0] =
+  //   (initScale * canvas.value.clientWidth - mapWidth) / -2;
   // the zoom function won't work.
   // this is fucking crazy.
   // TODO: figure out why.
   viewBox.value.offset = [
-    (initScale * canvas.value.clientWidth - mapWidth) / -2,
+    (initScale * canvas.value.clientWidth - map.value.width) / -2,
     0,
   ];
   canvasWidth.value = canvas.value.clientWidth;
@@ -47,11 +54,7 @@ watchEffect(initViewBox);
 
 const scale = computed(() => viewBox.value.rect[0] / canvasWidth.value);
 
-const mouse = ref({ left: 0, top: 0 });
-
 function handleDrag(e: MouseEvent) {
-  mouse.value.left = e.clientX;
-  mouse.value.top = e.clientY;
   if (e.buttons !== 2) return;
   viewBox.value.offset[0] -= e.movementX * scale.value;
   viewBox.value.offset[1] -= e.movementY * scale.value;
@@ -60,7 +63,7 @@ function handleDrag(e: MouseEvent) {
 
 function handleZoom(e: WheelEvent) {
   if (!canvas.value) return;
-  const initScale = mapHeight / canvas.value.clientHeight;
+  const initScale = map.value.height / canvas.value.clientHeight;
   const scaleCenter = math
     .chain([e.clientX, e.clientY])
     .multiply(scale.value)
@@ -97,9 +100,9 @@ function handleZoom(e: WheelEvent) {
 
 function limitViewBoxOffset() {
   if (!canvas.value) return;
-  const initScale = mapHeight / canvas.value.clientHeight;
+  const initScale = map.value.height / canvas.value.clientHeight;
   const initTopLeft = [
-    (initScale * canvas.value.clientWidth - mapWidth) / -2,
+    (initScale * canvas.value.clientWidth - map.value.width) / -2,
     0,
   ];
   const initBottomRight = math
@@ -126,12 +129,10 @@ function limitViewBoxOffset() {
     @contextmenu.prevent
     @mousemove="handleDrag"
     @wheel="handleZoom"
-    class="cursor-none"
+    class="w-screen h-screen"
   >
-    <div class="cursor horizontal" :style="`left: ${mouse.left}px;`"></div>
-    <div class="cursor vertical" :style="`top: ${mouse.top}px;`"></div>
     <svg
-      class="w-screen h-screen z-[-1] relative"
+      class="w-full h-full z-[-1] relative"
       :viewBox="`${viewBox.offset[0]} ${viewBox.offset[1]} ${viewBox.rect[0]} ${viewBox.rect[1]}`"
       preserveAspectRatio="none"
       ref="canvas"
@@ -144,32 +145,14 @@ function limitViewBoxOffset() {
         height="2000000"
       />
       <image
-        :href="mapImageUri"
+        :href="map.imgUrl"
         x="0"
         y="0"
-        :width="mapWidth"
-        :height="mapHeight"
+        :width="map.width"
+        :height="map.height"
       />
     </svg>
   </div>
 </template>
 
-<style scoped>
-.cursor {
-  position: fixed;
-  background-color: rgba(255, 255, 255, 0.5);
-  z-index: 9999;
-  top: 0;
-  pointer-events: none;
-}
-
-.vertical {
-  width: 100vw;
-  height: 3px;
-}
-
-.horizontal {
-  width: 3px;
-  height: 100vh;
-}
-</style>
+<style scoped></style>
