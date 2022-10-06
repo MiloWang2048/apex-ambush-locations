@@ -136,6 +136,8 @@ function limitViewBoxOffset() {
       :viewBox="`${viewBox.offset[0]} ${viewBox.offset[1]} ${viewBox.rect[0]} ${viewBox.rect[1]}`"
       preserveAspectRatio="none"
       ref="canvas"
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
     >
       <rect
         fill="black"
