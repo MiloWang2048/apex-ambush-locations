@@ -1,12 +1,12 @@
-# Apex大佐点位图
+# Apex 大佐点位图
 
 ## Getting started
 
 ### 前置条件
 
-配置TCB环境：TBD
+配置 TCB 环境：TBD
 
-### 使用GitPod
+### 使用 GitPod
 
 [![](https://img.shields.io/badge/Contribute%20with-Gitpod-908a85?logo=gitpod)](https://gitpod.io/#https://github.com/MiloWang2048/apex-ambush-locations)
 
@@ -18,7 +18,7 @@ cd apex-ambush-locations
 cp .env.local.example .env.local
 ```
 
-编辑`.env.local`，写入正确的tcb环境标识和地区标识，然后
+编辑`.env.local`，写入正确的 tcb 环境标识和地区标识，然后
 
 ```sh
 npm i

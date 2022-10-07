@@ -1,5 +1,7 @@
 <template>
-  <div class="fixed h-10 z-1 top-0 left-0 right-0 backdrop-blur-md flex">
+  <div
+    class="z-1 fixed top-0 left-0 right-0 flex h-10 bg-zinc-600 bg-opacity-50 backdrop-blur-md"
+  >
     <img
       class="block h-full w-10"
       src="/apex-icon.png"
@@ -8,7 +10,7 @@
     />
     <div
       v-for="map of Maps"
-      class="flex flex-col justify-center h-full"
+      class="flex h-full flex-col justify-center"
       :class="{
         'bg-apex-red': hoverMap
           ? hoverMap === map.name

@@ -14,13 +14,3 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
-
-declare global {
-  interface Window {
-    _tcbEnv?: {
-      TCB_ENV_ID: string;
-      TCB_REGION: string;
-      TCB_SERVICE_DOMAIN: string;
-    };
-  }
-}

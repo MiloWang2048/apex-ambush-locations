@@ -176,7 +176,7 @@ function focus(x: number, y: number) {
 
 <template>
   <svg
-    class="w-screen h-screen"
+    class="h-screen w-screen"
     :viewBox="`${viewBox.offset[0]} ${viewBox.offset[1]} ${viewBox.rect[0]} ${viewBox.rect[1]}`"
     preserveAspectRatio="none"
     ref="canvas"
@@ -205,6 +205,7 @@ function focus(x: number, y: number) {
       @click="focus(location.x, location.y)"
     />
   </svg>
+  <RouterView />
 </template>
 
 <style scoped></style>
