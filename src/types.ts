@@ -1,3 +1,5 @@
+import { string } from "mathjs";
+
 export type ApexMapName =
   | "kings_canyon"
   | "worlds_edge"
@@ -24,5 +26,7 @@ export interface AmbushLocation {
     authorId: Id;
     authorName: string;
     likes: Id[];
+    content: string;
+    time: string;
   }[];
 }

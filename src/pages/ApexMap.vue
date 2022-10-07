@@ -6,6 +6,7 @@ import { DefaultMap, Maps } from "../libs/constants";
 import { AmbushLocation, ApexMap, ApexMapName } from "../types";
 import Ping from "../components/Ping.vue";
 import { re } from "mathjs";
+import { useCommonStore } from "../stores/CommonStore";
 
 const map = ref<ApexMap>(Maps.kings_canyon);
 const route = useRoute();
@@ -172,6 +173,8 @@ function focus(x: number, y: number) {
   viewBox.value.offset = offset;
   viewBox.value.rect = rect;
 }
+
+const commonStore = useCommonStore();
 </script>
 
 <template>
@@ -182,6 +185,7 @@ function focus(x: number, y: number) {
     ref="canvas"
     @contextmenu.prevent
     @mousemove="handleDrag"
+    @mousedown.right="commonStore.setDraggingMap(true)"
     @wheel="handleZoom"
   >
     <rect

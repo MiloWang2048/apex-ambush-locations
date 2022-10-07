@@ -7,6 +7,7 @@ import { TCB_APP } from "./InjectKeys";
 import { RouterView } from "vue-router";
 import ApexPointer from "./components/ApexPointer.vue";
 import Navigator from "./components/Navigator.vue";
+import { useCommonStore } from "./stores/CommonStore";
 
 const {
   TCB_ENV_ID = import.meta.env.VITE_TCB_ENV_ID,
@@ -23,12 +24,16 @@ const tcb = cloudbase.init({
 });
 
 provide(TCB_APP, tcb);
+
+const commonStore = useCommonStore();
 </script>
 
 <template>
-  <router-view />
-  <Navigator />
-  <ApexPointer />
+  <div @mouseup.right="commonStore.setDraggingMap(false)">
+    <router-view />
+    <Navigator />
+    <ApexPointer />
+  </div>
 </template>
 
 <style scoped></style>
