@@ -3,7 +3,9 @@ import { computed, ref, watchEffect } from "vue";
 import * as math from "mathjs";
 import { useRoute } from "vue-router";
 import { DefaultMap, Maps } from "../libs/constants";
-import { ApexMap, ApexMapName } from "../types";
+import { AmbushLocation, ApexMap, ApexMapName } from "../types";
+import Ping from "../components/Ping.vue";
+import { re } from "mathjs";
 
 const map = ref<ApexMap>(Maps.kings_canyon);
 const route = useRoute();
@@ -122,39 +124,89 @@ function limitViewBoxOffset() {
     number
   ];
 }
+
+const locations: AmbushLocation[] = [
+  {
+    name: "name",
+    map: "kings_canyon",
+    x: 400,
+    y: 400,
+    description: "",
+    comments: [],
+  },
+  {
+    name: "name",
+    map: "kings_canyon",
+    x: 400,
+    y: 600,
+    description: "",
+    comments: [],
+  },
+  {
+    name: "name",
+    map: "kings_canyon",
+    x: 600,
+    y: 400,
+    description: "",
+    comments: [],
+  },
+  {
+    name: "name",
+    map: "kings_canyon",
+    x: 600,
+    y: 600,
+    description: "",
+    comments: [],
+  },
+];
+
+const baseViewBoxWidth = 600;
+function focus(x: number, y: number) {
+  console.debug("focusing:", x, y);
+  if (!canvas.value) return;
+  const aspectRatio = canvas.value?.clientHeight / canvas.value?.clientWidth;
+  const rect: [number, number] = [
+    baseViewBoxWidth,
+    aspectRatio * baseViewBoxWidth,
+  ];
+  const offset: [number, number] = [x - baseViewBoxWidth / 4, y - rect[1] / 2];
+  viewBox.value.offset = offset;
+  viewBox.value.rect = rect;
+  console.debug(viewBox.value);
+}
 </script>
 
 <template>
-  <div
+  <svg
+    class="w-screen h-screen"
+    :viewBox="`${viewBox.offset[0]} ${viewBox.offset[1]} ${viewBox.rect[0]} ${viewBox.rect[1]}`"
+    preserveAspectRatio="none"
+    ref="canvas"
     @contextmenu.prevent
     @mousemove="handleDrag"
     @wheel="handleZoom"
-    class="w-screen h-screen"
   >
-    <svg
-      class="w-full h-full z-[-1] relative"
-      :viewBox="`${viewBox.offset[0]} ${viewBox.offset[1]} ${viewBox.rect[0]} ${viewBox.rect[1]}`"
-      preserveAspectRatio="none"
-      ref="canvas"
-      version="1.1"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <rect
-        fill="black"
-        x="-1000000"
-        y="-1000000"
-        width="2000000"
-        height="2000000"
-      />
-      <image
-        :href="map.imgUrl"
-        x="0"
-        y="0"
-        :width="map.width"
-        :height="map.height"
-      />
-    </svg>
-  </div>
+    <rect
+      fill="black"
+      x="-1000000"
+      y="-1000000"
+      width="2000000"
+      height="2000000"
+    />
+    <image
+      :href="map.imgUrl"
+      x="0"
+      y="0"
+      :width="map.width"
+      :height="map.height"
+    />
+    <Ping
+      v-for="(location, index) of locations"
+      :x="location.x"
+      :y="location.y"
+      @click="focus(location.x, location.y)"
+    />
+  </svg>
 </template>
 
 <style scoped></style>
