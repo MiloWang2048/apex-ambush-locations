@@ -162,7 +162,6 @@ const locations: AmbushLocation[] = [
 
 const baseViewBoxWidth = 600;
 function focus(x: number, y: number) {
-  console.debug("focusing:", x, y);
   if (!canvas.value) return;
   const aspectRatio = canvas.value?.clientHeight / canvas.value?.clientWidth;
   const rect: [number, number] = [
@@ -172,7 +171,6 @@ function focus(x: number, y: number) {
   const offset: [number, number] = [x - baseViewBoxWidth / 4, y - rect[1] / 2];
   viewBox.value.offset = offset;
   viewBox.value.rect = rect;
-  console.debug(viewBox.value);
 }
 </script>
 
@@ -201,7 +199,7 @@ function focus(x: number, y: number) {
       :height="map.height"
     />
     <Ping
-      v-for="(location, index) of locations"
+      v-for="location of locations"
       :x="location.x"
       :y="location.y"
       @click="focus(location.x, location.y)"

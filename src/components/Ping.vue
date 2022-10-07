@@ -1,17 +1,24 @@
 <script lang="ts" setup>
 const emit = defineEmits(["click"]);
-const { x, y, selected } = defineProps<{
-  x: number;
-  y: number;
-  selected?: boolean;
-}>();
+const { x, y, selected, scale } = withDefaults(
+  defineProps<{
+    x: number;
+    y: number;
+    selected?: boolean;
+    scale?: number;
+  }>(),
+  {
+    scale: 0.5,
+  }
+);
 </script>
 
 <template>
-  <svg :x="x - 34" :y="y - 34" @click="emit('click')">
+  <svg :x="x - 68 * scale" :y="y - 68 * scale" @click="emit('click')">
     <image
       class="box"
       :class="{ selected }"
+      :style="`transform: scale(${scale});`"
       href="/ping.png"
       width="136"
       height="136"
@@ -23,7 +30,6 @@ const { x, y, selected } = defineProps<{
 .box {
   clip-path: path("M68,34 l34,34 l-34,34 l-34,-34 Z");
   transition: clip-path 0.2s;
-  transform: scale(0.5);
 }
 .box:hover,
 .selected {
