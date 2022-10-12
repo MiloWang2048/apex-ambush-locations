@@ -6,6 +6,7 @@ export const useCommonStore = defineStore("common", () => {
   const draggingMap = ref(false);
 
   const showLoginPanel = ref(false);
+  const showUserProfile = ref(false);
 
   const globalMessage = ref<string>();
   const timerHandle = ref<number>();
@@ -24,6 +25,7 @@ export const useCommonStore = defineStore("common", () => {
     draggingMap,
 
     showLoginPanel,
+    showUserProfile,
 
     globalMessage,
     alert,

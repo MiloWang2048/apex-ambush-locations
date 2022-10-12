@@ -2,13 +2,8 @@
 import { inject, ref } from "vue";
 import { useCommonStore } from "../stores/CommonStore";
 import { Close } from "@icon-park/vue-next";
-import { TCB_APP, TCB_AUTH } from "../InjectKeys";
-import {
-  extractTcbErrorMessage,
-  handleTcbError,
-  KnownTcbErrors,
-} from "../libs/utils";
-import { e } from "mathjs";
+import { TCB_AUTH } from "../InjectKeys";
+import { handleTcbError } from "../libs/utils";
 
 const commonStore = useCommonStore();
 const mode = ref<"SIGN_IN" | "SIGN_UP">("SIGN_IN");
@@ -51,6 +46,8 @@ async function submit() {
         email.value,
         password.value
       );
+      commonStore.user = user;
+      commonStore.showLoginPanel = false;
     } catch (error: any) {
       handleTcbError(commonStore, error);
     }
@@ -65,7 +62,6 @@ async function submit() {
     }
   }
 }
-commonStore.showLoginPanel = false;
 </script>
 
 <template>
