@@ -7,7 +7,7 @@ const commonStore = useCommonStore();
 <template>
   <div
     v-if="commonStore.globalMessage"
-    class="fixed top-16 left-1/3 right-1/3 z-10 rounded-lg bg-black bg-opacity-70 py-2 px-4 backdrop-blur"
+    class="fixed top-16 left-1/3 right-1/3 z-50 rounded-lg bg-black bg-opacity-70 py-2 px-4 backdrop-blur"
   >
     {{ commonStore.globalMessage }}
   </div>

@@ -23,6 +23,15 @@
         {{ map.displayName }}
       </router-link>
     </div>
+    <div class="grow"></div>
+    <div class="flex h-full flex-col justify-center px-4">
+      <button
+        class="rounded-full bg-blue-500 px-4 hover:bg-blue-400"
+        @click="commonStore.showLoginPanel = true"
+      >
+        登录
+      </button>
+    </div>
   </div>
 </template>
 
@@ -30,6 +39,7 @@
 import { computed, ref, watch } from "vue";
 import { useRoute, RouterLink } from "vue-router";
 import { DefaultMap, Maps } from "../libs/constants";
+import { useCommonStore } from "../stores/CommonStore";
 import { ApexMap, ApexMapName } from "../types";
 
 const route = useRoute();
@@ -41,6 +51,7 @@ watch(
   }
 );
 const hoverMap = ref<ApexMapName>();
+const commonStore = useCommonStore();
 </script>
 
 <style></style>

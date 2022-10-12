@@ -3,12 +3,13 @@
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import cloudbase from "@cloudbase/js-sdk";
 import { provide } from "vue";
-import { TCB_APP } from "./InjectKeys";
+import { TCB_APP, TCB_AUTH } from "./InjectKeys";
 import { RouterView } from "vue-router";
 import ApexPointer from "./components/ApexPointer.vue";
 import Navigator from "./components/Navigator.vue";
 import { useCommonStore } from "./stores/CommonStore";
 import GlobalAlert from "./components/GlobalAlert.vue";
+import LoginPanel from "./components/LoginPanel.vue";
 
 const {
   TCB_ENV_ID = import.meta.env.VITE_TCB_ENV_ID,
@@ -26,15 +27,23 @@ const tcb = cloudbase.init({
 
 provide(TCB_APP, tcb);
 
+const auth = tcb.auth({ persistence: "local" });
+
+provide(TCB_AUTH, auth);
+
 const commonStore = useCommonStore();
+
+const { user } = auth.hasLoginState() ?? {};
+commonStore.user = user;
 </script>
 
 <template>
-  <div @mouseup.right="commonStore.setDraggingMap(false)">
+  <div @mouseup.right="commonStore.draggingMap = false">
     <RouterView />
     <Navigator />
     <ApexPointer />
     <GlobalAlert />
+    <LoginPanel />
   </div>
 </template>
 

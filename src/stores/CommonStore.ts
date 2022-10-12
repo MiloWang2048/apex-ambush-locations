@@ -1,16 +1,11 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { ref, shallowRef } from "vue";
+import cloudbase from "@cloudbase/js-sdk";
 
 export const useCommonStore = defineStore("common", () => {
   const draggingMap = ref(false);
-  function setDraggingMap(value: boolean) {
-    draggingMap.value = value;
-  }
 
   const showLoginPanel = ref(false);
-  function setLoginPanelVisibility(value: boolean) {
-    showLoginPanel.value = value;
-  }
 
   const globalMessage = ref<string>();
   const timerHandle = ref<number>();
@@ -22,12 +17,17 @@ export const useCommonStore = defineStore("common", () => {
       globalMessage.value = undefined;
     }, time);
   }
+
+  const user = shallowRef<cloudbase.auth.IUser>();
+
   return {
     draggingMap,
-    setDraggingMap,
+
     showLoginPanel,
-    setLoginPanelVisibility,
+
     globalMessage,
     alert,
+
+    user,
   };
 });
