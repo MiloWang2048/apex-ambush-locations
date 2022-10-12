@@ -8,6 +8,7 @@ import { RouterView } from "vue-router";
 import ApexPointer from "./components/ApexPointer.vue";
 import Navigator from "./components/Navigator.vue";
 import { useCommonStore } from "./stores/CommonStore";
+import GlobalAlert from "./components/GlobalAlert.vue";
 
 const {
   TCB_ENV_ID = import.meta.env.VITE_TCB_ENV_ID,
@@ -30,9 +31,10 @@ const commonStore = useCommonStore();
 
 <template>
   <div @mouseup.right="commonStore.setDraggingMap(false)">
-    <router-view />
+    <RouterView />
     <Navigator />
     <ApexPointer />
+    <GlobalAlert />
   </div>
 </template>
 

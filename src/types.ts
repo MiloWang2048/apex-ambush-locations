@@ -22,11 +22,4 @@ export interface AmbushLocation {
   x: number;
   y: number;
   description: string;
-  comments: {
-    authorId: Id;
-    authorName: string;
-    likes: Id[];
-    content: string;
-    time: string;
-  }[];
 }

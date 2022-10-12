@@ -4,6 +4,8 @@ import { useCommonStore } from "../stores/CommonStore";
 import { AmbushLocation } from "../types";
 import { Close } from "@icon-park/vue-next";
 import { useRoute, useRouter } from "vue-router";
+import DOMPurify from "dompurify";
+import { marked } from "marked";
 
 const { locationId } = defineProps<{ locationId: string }>();
 const location: AmbushLocation = {
@@ -11,53 +13,37 @@ const location: AmbushLocation = {
   map: "kings_canyon",
   x: 400,
   y: 400,
-  description: `Lorem ipsum dolor sit amet. Ex similique cupiditate id iste assumenda qui dolores optio cum odit veniam a quia sint et maxime voluptas. Est earum velit qui magni eveniet sed voluptas officia. 33 ullam voluptate in ipsum voluptates sit tenetur eius non rerum officiis est quas iure in quasi molestiae.
+  description: `
+# 一级标题
+## 二级标题
+### 三级标题
 
-Ut porro architecto ex dolorem iusto ut quia animi. Ut quia iure et ipsa corporis et fuga ipsum a ipsam quos qui odio recusandae. Ea incidunt ratione est reiciendis fuga sit voluptatem excepturi aut autem autem At reiciendis harum ex neque maiores ut architecto velit?
+段落段落段落段落段落段落段落
 
-Aut sint Quis non unde voluptatem est quas alias. Eos dolores rerum in aspernatur quia sit quam dolorem ut soluta galisum! Et sunt delectus sed autem totam in consequuntur nostrum aut aliquam minima id facere neque 33 laborum saepe! Est commodi asperiores id consequatur quis et consequatur pariatur sed eligendi voluptas 33 magnam aliquam ad nihil explicabo.`,
-  comments: [
-    {
-      authorId: "1",
-      authorName: "voluptatem",
-      likes: ["1", "2"],
-      content:
-        "Ut quia iure et ipsa corporis et fuga ipsum a ipsam quos qui odio recusandae.\nEos dolores rerum in aspernatur quia sit quam dolorem ut soluta galisum!",
-      time: "2022/10/8 00:35:43",
-    },
-    {
-      authorId: "2",
-      authorName: "voluptatem",
-      likes: ["1", "2"],
-      content:
-        "Ut quia iure et ipsa corporis et fuga ipsum a ipsam quos qui odio recusandae.\nEos dolores rerum in aspernatur quia sit quam dolorem ut soluta galisum!",
-      time: "2022/10/8 00:35:43",
-    },
-    {
-      authorId: "3",
-      authorName: "voluptatem",
-      likes: ["1", "2"],
-      content:
-        "Ut quia iure et ipsa corporis et fuga ipsum a ipsam quos qui odio recusandae.\nEos dolores rerum in aspernatur quia sit quam dolorem ut soluta galisum!",
-      time: "2022/10/8 00:35:43",
-    },
-    {
-      authorId: "4",
-      authorName: "voluptatem",
-      likes: ["1", "2"],
-      content:
-        "Ut quia iure et ipsa corporis et fuga ipsum a ipsam quos qui odio recusandae.\nEos dolores rerum in aspernatur quia sit quam dolorem ut soluta galisum!",
-      time: "2022/10/8 00:35:43",
-    },
-    {
-      authorId: "5",
-      authorName: "voluptatem",
-      likes: ["1", "2"],
-      content:
-        "Ut quia iure et ipsa corporis et fuga ipsum a ipsam quos qui odio recusandae.\nEos dolores rerum in aspernatur quia sit quam dolorem ut soluta galisum!",
-      time: "2022/10/8 00:35:43",
-    },
-  ],
+**加粗文本**
+
+*斜体文本*
+
+- 无序列表
+- 无序列表
+- 无序列表
+- 无序列表
+
+1. 有序列表
+2. 有序列表
+3. 有序列表
+4. 有序列表
+
+> 引用
+>
+> 引用
+
+---
+
+[链接](https://markdown.com.cn)
+
+![这是图片](/Kings_Canyon_MU4.webp)
+`,
 };
 const commonStore = useCommonStore();
 const router = useRouter();
@@ -77,37 +63,57 @@ const route = useRoute();
       <Close class="mx-1 block" size="24" fill="white" />
     </div>
     <div
-      class="h-full overflow-y-scroll rounded-xl rounded-tl-none bg-zinc-600 bg-opacity-50 backdrop-blur-xl"
+      class="h-full flex-grow overflow-x-hidden overflow-y-scroll rounded-xl rounded-tl-none bg-zinc-600 bg-opacity-50 backdrop-blur-xl"
     >
-      <div class="p-4">
+      <div class="p-4 pr-0">
         <h2 class="text-4xl">{{ location.name }}</h2>
         <p class="my-2 text-gray-400">
           {{ Maps[location.map].displayName }}
           [ {{ location.x }}, {{ location.y }} ]
         </p>
-        <p>{{ location.description }}</p>
-      </div>
-      <div class="h-px bg-white bg-opacity-30"></div>
-      <div class="m-4">
-        <h2 class="mb-2 text-3xl">评论</h2>
-        <template v-for="(comment, index) of location.comments">
-          <div>
-            <h3 class="mb-1 text-2xl">
-              {{ comment.authorName }}
-              <span class="ml-4 inline-block text-sm text-gray-400">{{
-                comment.time
-              }}</span>
-            </h3>
-            <p>{{ comment.content }}</p>
-          </div>
-          <div
-            v-if="index !== location.comments.length - 1"
-            class="my-2 h-px bg-white bg-opacity-30"
-          ></div>
-        </template>
+        <div
+          class="markdown"
+          v-html="DOMPurify.sanitize(marked.parse(location.description))"
+        ></div>
       </div>
     </div>
   </div>
 </template>
 
-<style scoped></style>
+<style lang="less">
+.markdown {
+  h1 {
+    @apply text-2xl leading-10;
+  }
+  h2 {
+    @apply text-xl leading-8;
+  }
+  h3 {
+    @apply text-lg leading-6;
+  }
+  p {
+    @apply leading-8;
+  }
+  strong {
+    @apply font-bold;
+  }
+  em {
+    @apply italic;
+  }
+  ul {
+    @apply relative left-5 list-disc;
+  }
+  ol {
+    @apply relative left-4 list-decimal;
+  }
+  a {
+    @apply rounded p-1 text-sky-300 hover:bg-slate-500;
+  }
+  hr {
+    @apply py-1;
+  }
+  blockquote {
+    @apply my-2 ml-2 border-l-2 border-gray-300 pl-2 backdrop-brightness-125;
+  }
+}
+</style>

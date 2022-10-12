@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watchEffect } from "vue";
 import * as math from "mathjs";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { DefaultMap, Maps } from "../libs/constants";
 import { AmbushLocation, ApexMap, ApexMapName } from "../types";
 import Ping from "../components/Ping.vue";
@@ -160,7 +160,7 @@ const locations: AmbushLocation[] = [
     comments: [],
   },
 ];
-
+const router = useRouter();
 const baseViewBoxWidth = 600;
 function focus(x: number, y: number) {
   if (!canvas.value) return;
@@ -172,6 +172,7 @@ function focus(x: number, y: number) {
   const offset: [number, number] = [x - baseViewBoxWidth / 4, y - rect[1] / 2];
   viewBox.value.offset = offset;
   viewBox.value.rect = rect;
+  router.push(`/${route.params.map || DefaultMap.name}/location/123`);
 }
 
 const commonStore = useCommonStore();
