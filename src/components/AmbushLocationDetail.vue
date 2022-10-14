@@ -1,69 +1,101 @@
 <script lang="ts" setup>
-import { Maps } from "../libs/constants";
-import { useCommonStore } from "../stores/CommonStore";
-import { AmbushLocation } from "../types";
-import { Close } from "@icon-park/vue-next";
+import { Maps, testDescription, AmbushLocation } from "../libs";
+import { useCommonStore } from "../stores/common-store";
+import { Close, Save, CloseOne, Editor } from "@icon-park/vue-next";
 import { useRoute, useRouter } from "vue-router";
 import DOMPurify from "dompurify";
 import { marked } from "marked";
+import { ref, watchEffect } from "vue";
+import { computed } from "@vue/reactivity";
 
 const { locationId } = defineProps<{ locationId: string }>();
-const location: AmbushLocation = {
+const location = ref<AmbushLocation>({
   name: "测试点位",
   map: "kings_canyon",
+  authorId: "636f9d292b8c45189ef18f3ec1d9ff51",
   x: 400,
   y: 400,
-  description: `
-# 一级标题
-## 二级标题
-### 三级标题
-
-段落段落段落段落段落段落段落
-
-**加粗文本**
-
-*斜体文本*
-
-- 无序列表
-- 无序列表
-- 无序列表
-- 无序列表
-
-1. 有序列表
-2. 有序列表
-3. 有序列表
-4. 有序列表
-
-> 引用
->
-> 引用
-
----
-
-[链接](https://markdown.com.cn)
-
-![这是图片](/Kings_Canyon_MU4.webp)
-`,
-};
+  description: testDescription,
+});
 const commonStore = useCommonStore();
 const router = useRouter();
 const route = useRoute();
+
+const markingNewLocation = computed(() => locationId === "new");
+
+function save() {}
 </script>
 
 <template>
   <div
-    class="fixed right-4 bottom-4 top-14 z-[2] flex w-5/12"
+    class="fixed right-4 bottom-4 top-14 z-[2] flex min-w-fit"
     :class="{ 'pointer-events-none': commonStore.draggingMap }"
     @contextmenu.prevent
   >
-    <div
-      class="flex h-8 w-8 flex-col items-center justify-center rounded-l-md bg-zinc-600 bg-opacity-50 backdrop-blur-xl hover:bg-apex-red"
-      @click="router.push(`/${route.params.map}`)"
-    >
-      <Close class="mx-1 block" size="24" fill="white" />
+    <!-- close button -->
+    <div>
+      <div
+        class="flex h-8 w-8 flex-col items-center justify-center rounded-l-md bg-zinc-600 bg-opacity-50 backdrop-blur-xl hover:bg-apex-red"
+        @click="router.push(`/${route.params.map}`)"
+      >
+        <Close class="mx-1 block" size="24" fill="white" />
+      </div>
+      <div
+        v-if="route.query.edit"
+        class="mt-2 w-8 rounded-l-md bg-apex-red py-2 text-center hover:bg-apex-red-light"
+        @click="save"
+      >
+        <Save class="mx-1 block" size="24" fill="white" />
+        保 存
+      </div>
+      <div
+        v-if="route.query.edit"
+        class="mt-2 w-8 rounded-l-md bg-neutral-500 py-2 text-center hover:bg-neutral-400"
+        @click="router.push({ path: '' })"
+      >
+        <CloseOne class="mx-1 block" size="24" fill="white" />
+        取 消
+      </div>
+      <div
+        v-if="!route.query.edit && commonStore.user?.uid === location.authorId"
+        class="mt-2 w-8 rounded-l-md bg-blue-500 py-2 text-center hover:bg-blue-400"
+        @click="router.push({ path: '', query: { edit: 1 } })"
+      >
+        <Editor class="mx-1 block" size="24" fill="white" />
+        编 辑
+      </div>
     </div>
+
+    <!-- editor -->
     <div
-      class="h-full flex-grow overflow-x-hidden overflow-y-scroll rounded-xl rounded-tl-none bg-zinc-600 bg-opacity-50 backdrop-blur-xl"
+      v-if="route.query.edit"
+      class="h-full w-[36rem] overflow-hidden rounded-xl rounded-t-none bg-zinc-600 bg-opacity-50 backdrop-blur-xl"
+    >
+      <div class="flex h-full flex-col p-4">
+        <div class="flex items-baseline">
+          <div class="mr-2">点位名称</div>
+          <input
+            type="text"
+            id="title"
+            class="block h-8 grow rounded-sm bg-neutral-800 px-2 leading-8 focus:outline-none"
+            v-model="location.name"
+          />
+        </div>
+        <div class="mt-4 flex grow items-stretch">
+          <div class="mr-2">描述文本</div>
+          <textarea
+            type="text"
+            id="title"
+            class="grow resize-none rounded-sm bg-neutral-800 px-2 focus:outline-none"
+            v-model="location.description"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- location detail -->
+    <div
+      class="h-full w-[36rem] overflow-x-hidden overflow-y-scroll rounded-xl rounded-tl-none bg-zinc-600 bg-opacity-50 backdrop-blur-xl"
     >
       <div class="p-4 pr-0">
         <h2 class="text-4xl">{{ location.name }}</h2>

@@ -1,9 +1,8 @@
 <script lang="ts" setup>
-import { useCommonStore } from "../stores/CommonStore";
+import { useCommonStore } from "../stores/common-store";
 import { Close } from "@icon-park/vue-next";
 import { inject } from "vue";
-import { TCB_AUTH } from "../InjectKeys";
-import { handleTcbError } from "../libs/utils";
+import { TCB_AUTH, handleTcbError } from "../libs";
 
 const commonStore = useCommonStore();
 const auth = inject(TCB_AUTH);

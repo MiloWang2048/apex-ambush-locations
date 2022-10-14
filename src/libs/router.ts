@@ -4,13 +4,14 @@ import {
   createWebHistory,
   RouteRecordRaw,
 } from "vue-router";
-import AmbushLocationDetail from "./components/AmbushLocationDetail.vue";
-import ApexMap from "./pages/ApexMap.vue";
+import AmbushLocationDetail from "../components/AmbushLocationDetail.vue";
+import Index from "../pages/Index.vue";
+import NotFound from "../pages/NotFound.vue";
 
 const routes: RouteRecordRaw[] = [
   {
     path: "/:map?",
-    component: ApexMap,
+    component: Index,
     children: [
       {
         path: "location/:locationId",
@@ -22,6 +23,10 @@ const routes: RouteRecordRaw[] = [
         redirect: "", // redirect to parent route
       },
     ],
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    component: NotFound,
   },
 ];
 

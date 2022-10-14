@@ -1,9 +1,8 @@
 <script lang="ts" setup>
 import { inject, ref } from "vue";
-import { useCommonStore } from "../stores/CommonStore";
+import { useCommonStore } from "../stores/common-store";
 import { Close } from "@icon-park/vue-next";
-import { TCB_AUTH } from "../InjectKeys";
-import { handleTcbError } from "../libs/utils";
+import { handleTcbError, TCB_AUTH } from "../libs";
 
 const commonStore = useCommonStore();
 const mode = ref<"SIGN_IN" | "SIGN_UP">("SIGN_IN");

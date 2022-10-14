@@ -1,4 +1,4 @@
-import { useCommonStore } from "../stores/CommonStore";
+import { useCommonStore } from "../stores/common-store";
 
 export interface ExtractedTcbError {
   err: string;

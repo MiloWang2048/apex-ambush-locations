@@ -1,7 +1,7 @@
 import { createApp } from "vue";
 import "./global.css";
 import App from "./App.vue";
-import { router } from "./router";
+import { router } from "./libs/router";
 import { createPinia } from "pinia";
 import "@icon-park/vue-next/styles/index.css";
 

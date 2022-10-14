@@ -21,6 +21,8 @@ export const useCommonStore = defineStore("common", () => {
 
   const user = shallowRef<cloudbase.auth.IUser>();
 
+  const pingNewLocation = ref(false);
+
   return {
     draggingMap,
 
@@ -31,5 +33,7 @@ export const useCommonStore = defineStore("common", () => {
     alert,
 
     user,
+
+    pingNewLocation,
   };
 });

@@ -2,20 +2,17 @@
 import { computed, ref, watchEffect } from "vue";
 import * as math from "mathjs";
 import { useRoute, useRouter } from "vue-router";
-import { DefaultMap, Maps } from "../libs/constants";
-import { AmbushLocation, ApexMap, ApexMapName } from "../types";
-import Ping from "../components/Ping.vue";
-import { re } from "mathjs";
-import { useCommonStore } from "../stores/CommonStore";
+import { AmbushLocation, ApexMap, DefaultMap } from "../libs";
+import Ping from "./Ping.vue";
+import { useCommonStore } from "../stores/common-store";
 
-const map = ref<ApexMap>(Maps.kings_canyon);
+const { map, scaleSpeed } = defineProps<{
+  locations: AmbushLocation[];
+  map: ApexMap;
+  scaleSpeed: number;
+}>();
+
 const route = useRoute();
-
-watchEffect(() => {
-  map.value = Maps[route.params.map as ApexMapName] || DefaultMap;
-});
-
-const scaleSpeed = 0.0015;
 
 type ViewBox = {
   /**
@@ -36,7 +33,7 @@ const canvas = ref<SVGSVGElement>();
 const canvasWidth = ref(1);
 function initViewBox() {
   if (!canvas.value) return;
-  const initScale = map.value.height / canvas.value.clientHeight;
+  const initScale = map.height / canvas.value.clientHeight;
   viewBox.value.rect = math.multiply(
     [canvas.value.clientWidth, canvas.value.clientHeight],
     initScale
@@ -48,7 +45,7 @@ function initViewBox() {
   // this is fucking crazy.
   // TODO: figure out why.
   viewBox.value.offset = [
-    (initScale * canvas.value.clientWidth - map.value.width) / -2,
+    (initScale * canvas.value.clientWidth - map.width) / -2,
     0,
   ];
   canvasWidth.value = canvas.value.clientWidth;
@@ -66,7 +63,7 @@ function handleDrag(e: MouseEvent) {
 
 function handleZoom(e: WheelEvent) {
   if (!canvas.value) return;
-  const initScale = map.value.height / canvas.value.clientHeight;
+  const initScale = map.height / canvas.value.clientHeight;
   const scaleCenter = math
     .chain([e.clientX, e.clientY])
     .multiply(scale.value)
@@ -103,9 +100,9 @@ function handleZoom(e: WheelEvent) {
 
 function limitViewBoxOffset() {
   if (!canvas.value) return;
-  const initScale = map.value.height / canvas.value.clientHeight;
+  const initScale = map.height / canvas.value.clientHeight;
   const initTopLeft = [
-    (initScale * canvas.value.clientWidth - map.value.width) / -2,
+    (initScale * canvas.value.clientWidth - map.width) / -2,
     0,
   ];
   const initBottomRight = math
@@ -126,40 +123,6 @@ function limitViewBoxOffset() {
   ];
 }
 
-const locations: AmbushLocation[] = [
-  {
-    name: "name",
-    map: "kings_canyon",
-    x: 400,
-    y: 400,
-    description: "",
-    comments: [],
-  },
-  {
-    name: "name",
-    map: "kings_canyon",
-    x: 400,
-    y: 600,
-    description: "",
-    comments: [],
-  },
-  {
-    name: "name",
-    map: "kings_canyon",
-    x: 600,
-    y: 400,
-    description: "",
-    comments: [],
-  },
-  {
-    name: "name",
-    map: "kings_canyon",
-    x: 600,
-    y: 600,
-    description: "",
-    comments: [],
-  },
-];
 const router = useRouter();
 const baseViewBoxWidth = 600;
 function focus(x: number, y: number) {
@@ -176,6 +139,38 @@ function focus(x: number, y: number) {
 }
 
 const commonStore = useCommonStore();
+
+function markNewLocation(e: MouseEvent) {
+  if (!commonStore.pingNewLocation) return;
+  const coordination = math
+    .chain([e.clientX, e.clientY])
+    .multiply(scale.value)
+    .add(viewBox.value.offset)
+    .done();
+  commonStore.pingNewLocation = false;
+  focus(coordination[0], coordination[1]);
+  router.push({
+    path: `/${route.params.map || DefaultMap.name}/location/new`,
+    query: {
+      edit: "1",
+      x: String(coordination[0]),
+      y: String(coordination[1]),
+    },
+  });
+}
+
+const dragStart = ref<[number, number]>();
+function startDrag(e: MouseEvent) {
+  commonStore.draggingMap = true;
+  dragStart.value = [e.x, e.y];
+}
+
+function endDrag(e: MouseEvent) {
+  if (!dragStart.value) return;
+  if (math.norm([e.x - dragStart.value[0], e.y - dragStart.value[1]]) < 5)
+    commonStore.pingNewLocation = false;
+  dragStart.value = undefined;
+}
 </script>
 
 <template>
@@ -186,7 +181,9 @@ const commonStore = useCommonStore();
     ref="canvas"
     @contextmenu.prevent
     @mousemove="handleDrag"
-    @mousedown.right="commonStore.setDraggingMap(true)"
+    @mousedown.right="startDrag"
+    @mouseup.right="endDrag"
+    @click.left="markNewLocation"
     @wheel="handleZoom"
   >
     <rect

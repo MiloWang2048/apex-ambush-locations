@@ -19,6 +19,7 @@ export interface ApexMap {
 export interface AmbushLocation {
   name: string;
   map: ApexMapName;
+  authorId: string;
   x: number;
   y: number;
   description: string;

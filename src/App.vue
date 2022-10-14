@@ -3,11 +3,11 @@
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import cloudbase from "@cloudbase/js-sdk";
 import { provide } from "vue";
-import { TCB_APP, TCB_AUTH } from "./InjectKeys";
+import { TCB_APP, TCB_AUTH } from "./libs";
 import { RouterView } from "vue-router";
 import ApexPointer from "./components/ApexPointer.vue";
 import Navigator from "./components/Navigator.vue";
-import { useCommonStore } from "./stores/CommonStore";
+import { useCommonStore } from "./stores/common-store";
 import GlobalAlert from "./components/GlobalAlert.vue";
 import LoginPanel from "./components/LoginPanel.vue";
 import UserProfile from "./components/UserProfile.vue";

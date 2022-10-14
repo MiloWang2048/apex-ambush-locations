@@ -1,16 +1,14 @@
 <script lang="ts" setup>
 const emit = defineEmits(["click"]);
-const { x, y, selected, scale } = withDefaults(
-  defineProps<{
-    x: number;
-    y: number;
-    selected?: boolean;
-    scale?: number;
-  }>(),
-  {
-    scale: 0.5,
-  }
-);
+interface Props {
+  x: number;
+  y: number;
+  selected?: boolean;
+  scale?: number;
+}
+withDefaults(defineProps<Props>(), {
+  scale: 0.5,
+});
 </script>
 
 <template>

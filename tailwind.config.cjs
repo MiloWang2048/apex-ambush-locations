@@ -6,7 +6,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "apex-red": "rgb(205, 51, 51)",
+        "apex-red": "#CD3333",
+        "apex-red-light": "#F53D3D",
       },
     },
   },

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { ref, watch } from "vue";
 import { useRoute, RouterLink } from "vue-router";
-import { DefaultMap, Maps } from "../libs/constants";
-import { useCommonStore } from "../stores/CommonStore";
-import { ApexMap, ApexMapName } from "../types";
+import { DefaultMap, Maps, ApexMap, ApexMapName } from "../libs";
+import { useCommonStore } from "../stores/common-store";
+import { AddFour } from "@icon-park/vue-next";
 
 const route = useRoute();
 const currentMap = ref<ApexMap>();
@@ -51,7 +51,19 @@ function handleClickUserButton() {
       </router-link>
     </div>
     <div class="grow"></div>
-    <div class="flex h-full flex-col justify-center px-4">
+    <div
+      class="flex h-full flex-col justify-center pr-4"
+      v-if="commonStore.user"
+    >
+      <button
+        class="rounded-full bg-blue-500 px-4 hover:bg-blue-400"
+        @click="commonStore.pingNewLocation = true"
+      >
+        <AddFour />
+        添加点位
+      </button>
+    </div>
+    <div class="flex h-full flex-col justify-center pr-4">
       <button
         class="rounded-full bg-blue-500 px-4 hover:bg-blue-400"
         @click="handleClickUserButton"
