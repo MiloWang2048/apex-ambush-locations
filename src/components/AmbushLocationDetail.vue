@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Maps, testDescription, AmbushLocation } from "../libs";
+import { Maps, testDescription, AmbushLocation, throttle } from "../libs";
 import { useCommonStore } from "../stores/common-store";
 import { Close, Save, CloseOne, Editor } from "@icon-park/vue-next";
 import { useRoute, useRouter } from "vue-router";
@@ -22,6 +22,10 @@ const router = useRouter();
 const route = useRoute();
 
 const markingNewLocation = computed(() => locationId === "new");
+
+const changeDescriptionThrottled = throttle((e) => {
+  location.value.description = (e.target as any)?.value;
+}, 300);
 
 function save() {}
 </script>
@@ -87,7 +91,8 @@ function save() {}
             type="text"
             id="title"
             class="grow resize-none rounded-sm bg-neutral-800 px-2 focus:outline-none"
-            v-model="location.description"
+            :value="location.description"
+            @input="changeDescriptionThrottled"
           />
         </div>
       </div>
