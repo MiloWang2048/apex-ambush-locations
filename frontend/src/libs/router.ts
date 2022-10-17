@@ -6,9 +6,13 @@ import {
 } from "vue-router";
 import AmbushLocationDetail from "../components/AmbushLocationDetail.vue";
 import Index from "../pages/Index.vue";
-import NotFound from "../pages/NotFound.vue";
+import ErrorPage from "../pages/ErrorPage.vue";
 
 const routes: RouteRecordRaw[] = [
+  {
+    path: "/error",
+    component: ErrorPage,
+  },
   {
     path: "/:map?",
     component: Index,
@@ -26,7 +30,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: "/:pathMatch(.*)*",
-    component: NotFound,
+    component: ErrorPage,
   },
 ];
 

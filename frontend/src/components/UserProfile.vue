@@ -1,11 +1,10 @@
 <script lang="ts" setup>
 import { useCommonStore } from "../stores/common-store";
 import { Close } from "@icon-park/vue-next";
-import { inject } from "vue";
-import { TCB_AUTH, handleTcbError } from "../libs";
+import { handleTcbError } from "../libs";
 
 const commonStore = useCommonStore();
-const auth = inject(TCB_AUTH);
+const { auth } = commonStore;
 
 async function handleLogout() {
   try {

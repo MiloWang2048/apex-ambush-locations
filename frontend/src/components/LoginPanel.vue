@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { inject, ref } from "vue";
+import { ref } from "vue";
 import { useCommonStore } from "../stores/common-store";
 import { Close } from "@icon-park/vue-next";
-import { handleTcbError, TCB_AUTH } from "../libs";
+import { handleTcbError } from "../libs";
 
 const commonStore = useCommonStore();
 const mode = ref<"SIGN_IN" | "SIGN_UP">("SIGN_IN");
@@ -11,7 +11,7 @@ const email = ref("");
 const password = ref("");
 const passwordRepeat = ref("");
 
-const auth = inject(TCB_AUTH);
+const { auth } = commonStore;
 
 function checkForm(isSignUp = false): boolean {
   if (!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(email.value)) {

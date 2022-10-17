@@ -64,37 +64,16 @@ export const testDescription = `# 一级标题
 ![这是图片](/Kings_Canyon_MU4.webp)
 `;
 
-export const testLocations: AmbushLocation[] = [
-  {
-    name: "name",
-    map: "kings_canyon",
-    authorId: "636f9d292b8c45189ef18f3ec1d9ff51",
-    x: 400,
-    y: 400,
-    description: "",
-  },
-  {
-    name: "name",
-    map: "kings_canyon",
-    authorId: "636f9d292b8c45189ef18f3ec1d9ff51",
-    x: 400,
-    y: 600,
-    description: "",
-  },
-  {
-    name: "name",
-    map: "kings_canyon",
-    authorId: "636f9d292b8c45189ef18f3ec1d9ff51",
-    x: 600,
-    y: 400,
-    description: "",
-  },
-  {
-    name: "name",
-    map: "kings_canyon",
-    authorId: "636f9d292b8c45189ef18f3ec1d9ff51",
-    x: 600,
-    y: 600,
-    description: "",
-  },
-];
+export const locationDescriptionPlaceholder = `
+在此处填写点位描述，支持部分[markdown语法](https://markdown.com.cn)
+`;
+
+export const emptyLocation: AmbushLocation = {
+  name: "",
+  map: "kings_canyon",
+  _id: "",
+  _openid: "",
+  x: 0,
+  y: 0,
+  description: "",
+};

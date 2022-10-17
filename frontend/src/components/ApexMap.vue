@@ -2,7 +2,7 @@
 import { computed, ref, watchEffect } from "vue";
 import * as math from "mathjs";
 import { useRoute, useRouter } from "vue-router";
-import { AmbushLocation, ApexMap, DefaultMap } from "../libs";
+import { AmbushLocation, ApexMap } from "../libs";
 import Ping from "./Ping.vue";
 import { useCommonStore } from "../stores/common-store";
 
@@ -11,8 +11,6 @@ const { map, scaleSpeed } = defineProps<{
   map: ApexMap;
   scaleSpeed: number;
 }>();
-
-const route = useRoute();
 
 type ViewBox = {
   /**
@@ -125,6 +123,7 @@ function limitViewBoxOffset() {
 
 const router = useRouter();
 const baseViewBoxWidth = 600;
+
 function focus(x: number, y: number) {
   if (!canvas.value) return;
   const aspectRatio = canvas.value?.clientHeight / canvas.value?.clientWidth;
@@ -135,7 +134,22 @@ function focus(x: number, y: number) {
   const offset: [number, number] = [x - baseViewBoxWidth / 4, y - rect[1] / 2];
   viewBox.value.offset = offset;
   viewBox.value.rect = rect;
-  router.push(`/${route.params.map || DefaultMap.name}/location/123`);
+}
+
+function openLocationDetail(
+  id: string,
+  edit?: boolean,
+  x?: number,
+  y?: number
+) {
+  router.push({
+    path: `/${commonStore.mapName}/location/${id}`,
+    query: {
+      edit: edit ? "true" : undefined,
+      x,
+      y,
+    },
+  });
 }
 
 const commonStore = useCommonStore();
@@ -149,14 +163,7 @@ function markNewLocation(e: MouseEvent) {
     .done();
   commonStore.pingNewLocation = false;
   focus(coordination[0], coordination[1]);
-  router.push({
-    path: `/${route.params.map || DefaultMap.name}/location/new`,
-    query: {
-      edit: "1",
-      x: String(coordination[0]),
-      y: String(coordination[1]),
-    },
-  });
+  openLocationDetail("new", true, ...coordination);
 }
 
 const dragStart = ref<[number, number]>();
@@ -170,6 +177,12 @@ function endDrag(e: MouseEvent) {
   if (math.norm([e.x - dragStart.value[0], e.y - dragStart.value[1]]) < 5)
     commonStore.pingNewLocation = false;
   dragStart.value = undefined;
+}
+
+function handleClickLocation(location: AmbushLocation) {
+  if (location._id === "new") return;
+  focus(location.x, location.y);
+  openLocationDetail(location._id);
 }
 </script>
 
@@ -204,7 +217,7 @@ function endDrag(e: MouseEvent) {
       v-for="location of locations"
       :x="location.x"
       :y="location.y"
-      @click="focus(location.x, location.y)"
+      @click="handleClickLocation(location)"
     />
   </svg>
   <RouterView />

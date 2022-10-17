@@ -1,33 +1,34 @@
 <script lang="ts" setup>
-import { Maps, testDescription, AmbushLocation, throttle } from "../libs";
+import { Maps, throttle, emptyLocation } from "../libs";
 import { useCommonStore } from "../stores/common-store";
 import { Close, Save, CloseOne, Editor } from "@icon-park/vue-next";
 import { useRoute, useRouter } from "vue-router";
 import DOMPurify from "dompurify";
 import { marked } from "marked";
-import { ref, watchEffect } from "vue";
 import { computed } from "@vue/reactivity";
 
 const { locationId } = defineProps<{ locationId: string }>();
-const location = ref<AmbushLocation>({
-  name: "测试点位",
-  map: "kings_canyon",
-  authorId: "636f9d292b8c45189ef18f3ec1d9ff51",
-  x: 400,
-  y: 400,
-  description: testDescription,
-});
 const commonStore = useCommonStore();
+const location = computed(
+  () =>
+    commonStore.locations.find((location) => location._id === locationId) ??
+    emptyLocation
+);
+
 const router = useRouter();
 const route = useRoute();
-
-const markingNewLocation = computed(() => locationId === "new");
 
 const changeDescriptionThrottled = throttle((e) => {
   location.value.description = (e.target as any)?.value;
 }, 300);
 
-function save() {}
+function save() {
+  if (locationId === "new") {
+    commonStore.addLocation(location.value);
+  } else {
+    commonStore.updateLocation(location.value);
+  }
+}
 </script>
 
 <template>
@@ -40,7 +41,7 @@ function save() {}
     <div>
       <div
         class="flex h-8 w-8 flex-col items-center justify-center rounded-l-md bg-zinc-600 bg-opacity-50 backdrop-blur-xl hover:bg-apex-red"
-        @click="router.push(`/${route.params.map}`)"
+        @click="router.push(`/${commonStore.mapName}`)"
       >
         <Close class="mx-1 block" size="24" fill="white" />
       </div>
@@ -55,15 +56,15 @@ function save() {}
       <div
         v-if="route.query.edit"
         class="mt-2 w-8 rounded-l-md bg-neutral-500 py-2 text-center hover:bg-neutral-400"
-        @click="router.push({ path: '' })"
+        @click="router.back()"
       >
         <CloseOne class="mx-1 block" size="24" fill="white" />
         取 消
       </div>
       <div
-        v-if="!route.query.edit && commonStore.user?.uid === location.authorId"
+        v-if="!route.query.edit && commonStore.user?.uid === location._openid"
         class="mt-2 w-8 rounded-l-md bg-blue-500 py-2 text-center hover:bg-blue-400"
-        @click="router.push({ path: '', query: { edit: 1 } })"
+        @click="router.push({ path: '', query: { edit: 'true' } })"
       >
         <Editor class="mx-1 block" size="24" fill="white" />
         编 辑
@@ -106,7 +107,7 @@ function save() {}
         <h2 class="text-4xl">{{ location.name }}</h2>
         <p class="my-2 text-gray-400">
           {{ Maps[location.map].displayName }}
-          [ {{ location.x }}, {{ location.y }} ]
+          [ {{ location.x.toFixed(2) }}, {{ location.y.toFixed(2) }} ]
         </p>
         <div
           class="markdown"

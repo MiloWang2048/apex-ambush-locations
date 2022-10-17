@@ -1,5 +1,3 @@
-import { string } from "mathjs";
-
 export type ApexMapName =
   | "kings_canyon"
   | "worlds_edge"
@@ -16,10 +14,14 @@ export interface ApexMap {
   height: number;
 }
 
-export interface AmbushLocation {
+export interface TcbDocument {
+  _id: string;
+  _openid: string;
+}
+
+export interface AmbushLocation extends TcbDocument {
   name: string;
   map: ApexMapName;
-  authorId: string;
   x: number;
   y: number;
   description: string;
