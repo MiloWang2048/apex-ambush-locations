@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "backend"
+		},
+		{
+			"path": "frontend"
+		},
+		{
+			"path": "ts-rpc"
+		}
+	],
+	"settings": {
+		"typescript.tsdk": "node_modules/typescript/lib"
+	}
+}

@@ -2,7 +2,9 @@
   "name": "apex-ambush",
   "version": "1.0.0",
   "private": "true",
-  "scripts": {},
+  "scripts": {
+    "clean": "rimraf ./node_modules ./backend/node_modules ./frontend/node_modules ./ts-rpc/node_modules"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MiloWang2048/apex-ambush-locations.git"
@@ -13,8 +15,17 @@
     "url": "https://github.com/MiloWang2048/apex-ambush-locations/issues"
   },
   "homepage": "https://github.com/MiloWang2048/apex-ambush-locations#readme",
-  "workspaces": [
-    "frontend",
-    "backend"
-  ]
+  "workspaces": {
+    "packages": [
+      "frontend",
+      "backend",
+      "ts-rpc"
+    ],
+    "nohoist": [
+      "**/@types/**"
+    ]
+  },
+  "devDependencies": {
+    "rimraf": "^3.0.2"
+  }
 }
