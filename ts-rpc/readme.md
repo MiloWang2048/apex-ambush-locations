@@ -1,14 +1,38 @@
-# ts-rpc
+# TS-RPC
 
-- 可以根据handlers生成handlerMap
-- 提供一个express中间件生成器，接受handlerMap，生成一个中间件，用以处理rpc
-- 命令
-  - gen：生成client和server的ts文件
-  - build：编译client和server
-  - dev：监听改动并生成、编译client和server
-- 参数
-  - -c --config：指定配置文件，默认为ts-rpc.json
-  - -o --out-dir：指定构建输出目录
-  - -s --src：指定生成目录
-  - -h --handler-root：指定handler目录
-  - 
+## What is TS-RPC?
+
+一个基于express的简易后端框架，主要功能有
+
+- 将一组异步函数转换为http端点
+- 基于文件系统的简单路由（与nestjs的路由机制类似）
+- 直接生成可被前端引用的请求client
+- 完全的Ts和monorepo支持
+- 一个简单的cli，提供包括监听构建之类的有用工具
+
+## Why TS-RPC?
+
+想象这样一个场景：你要单独开发一个web项目，前端和后端都得自己写。如果采用标准的前后端分离开发模式，在整个过程中，处理前后端交互会占用大部分时间。如果你使用ts，还得为每个请求编写请求和响应类型。
+
+当后端接口结构因为不可抗力发生改变时，你需要耗费大量时间来处理一致性问题，如果你不小心弄错了某个接口的结构，造成的错误可能又得消耗大量进行debug和修复。显然，这种手动处理前后端交互的方式非常低效。
+
+在理想情况下，TS-RPC将能够达到这样的效果：
+
+- 开发者完全不与http打交道，调用后端服务就像直接调用某个npm包那样简单
+- 开发者完全不用编写任何前端请求模块，直接由后端代码生成
+- 完全的Typescript支持，如果有请求结构上的错误能够在编译阶段被检查出来
+
+这就是编写这个小框架的原因。它从原理到设计上都很简单，能够极大程度提升开发效率。
+
+## Getting started
+
+要创建一个使用TS-RPC的web项目，最快的方式是直接克隆模板仓库：
+
+
+
+首先你需要对[Monorepo](https://monorepo.tools/)和[Yarn workspace](https://classic.yarnpkg.com/lang/en/docs/workspaces/)有基本的了解。
+
+> 这是因为要从前端项目引用后端项目中的文件，将两个项目（或者说两个npm包）放在一个仓库中是比较明智的选择，这可以避免前后端版本不一致造成的困扰。
+
+
+
