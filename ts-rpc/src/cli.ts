@@ -66,7 +66,7 @@ program
     const config = loadConfig(options.config);
     await generate(config.sourceRoot, config.handlerRoot);
     const debouncedGenerate = _.debounce(generate, 500);
-    chokidar.watch(config.handlerRoot).on("all", () => {
+    chokidar.watch(config.handlerRoot).on("change", () => {
       debouncedGenerate(config.sourceRoot, config.handlerRoot);
     });
     const serverCompileProcess = exec(

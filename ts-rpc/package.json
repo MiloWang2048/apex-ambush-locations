@@ -4,8 +4,11 @@
   "private": "true",
   "bin": "./libs/esm/cli.js",
   "type": "module",
-  "main": "./libs/cjs/index.js",
-  "module": "./libs/esm/index.js",
+  "main": "./libs/esm/index.js",
+  "exports": {
+    "import": "./libs/esm/index.js",
+    "require": "./libs/cjs/index.cjs"
+  },
   "scripts": {
     "build": "rollup -c",
     "cli": "node libs/esm/cli.js",
