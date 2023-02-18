@@ -4,7 +4,6 @@
 var node_fs = require('node:fs');
 
 function loadConfig(path) {
-    console.log("path", path);
     let config = {
         sourceRoot: "src",
         handlerRoot: "src/handlers",

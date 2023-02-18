@@ -8,7 +8,6 @@ interface Config {
 }
 
 export function loadConfig(path: string) {
-  console.log("path", path)
   let config: Config = {
     sourceRoot: "src",
     handlerRoot: "src/handlers",

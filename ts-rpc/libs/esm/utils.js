@@ -2,7 +2,6 @@
 import { readFileSync } from 'node:fs';
 
 function loadConfig(path) {
-    console.log("path", path);
     let config = {
         sourceRoot: "src",
         handlerRoot: "src/handlers",

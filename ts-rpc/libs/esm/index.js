@@ -39,6 +39,7 @@ function generateServerHandler(handlerMap, errorMap = defaultErrorMap) {
                 // 系统抛出的Error对象具有stacktrace，不能直接返回给客户端
                 // logger.error(err);
                 res.json(errorMap[500] || defaultErrorMap[500]).end();
+                return;
             }
         }
         res.json({ result, error }).end();
