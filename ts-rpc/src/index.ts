@@ -8,7 +8,7 @@ const defaultErrorMap = {
   500: {
     result: undefined,
     error:
-      "Thrown object has unsupported type 'Error', please check your handler.",
+      "Unknown server error, please contact admin.",
   },
 };
 
@@ -49,6 +49,7 @@ export function generateServerHandler(
     try {
       result = await handler?.(...(callData.params ?? []));
     } catch (err: any) {
+      console.log(err);
       error = err;
       if (err instanceof Error) {
         // 系统抛出的Error对象具有stacktrace，不能直接返回给客户端

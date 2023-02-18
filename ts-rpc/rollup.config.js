@@ -7,14 +7,14 @@ import typescript from "@rollup/plugin-typescript";
 // cli+cjs
 // index+esm
 // index+cjs
-
+const external = ["commander", "lodash", "chokidar", "tree-kill", /node:.+/];
 /**
  * @type {import("rollup").RollupOptions}
  */
 export default [
   {
     input: ["./src/cli.ts"],
-    external: ["commander", "lodash", "chokidar", /node:.+/],
+    external,
     output: [
       {
         dir: "./libs/cjs/",
@@ -33,7 +33,7 @@ export default [
   },
   {
     input: ["./src/cli.ts"],
-    external: ["commander", "lodash", "chokidar", /node:.+/],
+    external,
     output: [
       {
         dir: "./libs/esm/",

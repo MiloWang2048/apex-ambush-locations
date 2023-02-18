@@ -2,7 +2,7 @@ const defaultErrorMap = {
     400: { result: undefined, error: "Invalid rpc request." },
     500: {
         result: undefined,
-        error: "Thrown object has unsupported type 'Error', please check your handler.",
+        error: "Unknown server error, please contact admin.",
     },
 };
 function verifyRequest(body) {
@@ -34,6 +34,7 @@ function generateServerHandler(handlerMap, errorMap = defaultErrorMap) {
             result = await handler?.(...(callData.params ?? []));
         }
         catch (err) {
+            console.log(err);
             error = err;
             if (err instanceof Error) {
                 // 系统抛出的Error对象具有stacktrace，不能直接返回给客户端
