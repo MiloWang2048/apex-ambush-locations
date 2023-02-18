@@ -1,0 +1,6 @@
+{
+  "sourceRoot": "src",
+  "handlerRoot": "src/functions",
+  "output": "dist",
+  "tsconfig": "tsconfig.json"
+}
