@@ -1,31 +1,6 @@
 # Apex 大佐点位图
 
-## Getting started
-
-### 前置条件
-
-配置 TCB 环境：TBD
-
-### 使用 GitPod
-
-[![](https://img.shields.io/badge/Contribute%20with-Gitpod-908a85?logo=gitpod)](https://gitpod.io/#https://github.com/MiloWang2048/apex-ambush-locations)
-
-### 本地开发
-
-```sh
-git clone https://github.com/MiloWang2048/apex-ambush-locations.git
-cd apex-ambush-locations
-cp .env.local.example .env.local
-```
-
-编辑`.env.local`，写入正确的 tcb 环境标识和地区标识，然后
-
-```sh
-npm i
-npm run dev
-```
-
-## Todos
+## TODO
 
 - 地图
   - [x] 拖拽、缩放
@@ -33,11 +8,11 @@ npm run dev
 - 点位
   - [x] 点位标记
   - [ ] 点位缩放适应
-  - [ ] 点位详情
+  - [x] 点位详情
     - [x] 点位详情支持markdown部分语法
-  - [ ] 添加点位
+  - [x] 添加点位
   - [ ] 删除点位
-  - [ ] 编辑点位
+  - [x] 编辑点位
 - 其他功能
   - [ ] 访问控制
     - [ ] 用户profile页面
@@ -58,3 +33,9 @@ npm run dev
   - [ ] 收藏
   - [ ] 内嵌b站播放器
   - [ ] 操作提示和图例
+
+
+
+## Blogging
+
+- [ ] `monorepo`下`@types/node`对前端项目的影响和使用`yarn workspace nohoist`的解决方案
