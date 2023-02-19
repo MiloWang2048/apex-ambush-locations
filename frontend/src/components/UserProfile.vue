@@ -1,19 +1,12 @@
 <script lang="ts" setup>
 import { useCommonStore } from "../stores/common-store";
 import { Close } from "@icon-park/vue-next";
-import { handleTcbError } from "../libs";
 
 const commonStore = useCommonStore();
-const { auth } = commonStore;
 
 async function handleLogout() {
-  try {
-    await auth?.signOut();
-    commonStore.user = undefined;
-    commonStore.showUserProfile = false;
-  } catch (error) {
-    handleTcbError(commonStore, error);
-  }
+  commonStore.jwt = undefined;
+  commonStore.showUserProfile = false;
 }
 </script>
 

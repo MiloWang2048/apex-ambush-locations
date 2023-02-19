@@ -2,12 +2,14 @@
 import { computed, ref, watchEffect } from "vue";
 import * as math from "mathjs";
 import { useRoute, useRouter } from "vue-router";
-import { AmbushLocation, ApexMap } from "../libs";
+import { ApexMap } from "../libs/types";
 import Ping from "./Ping.vue";
 import { useCommonStore } from "../stores/common-store";
+import type { Location } from "backend/dist/client/entities/location";
+import { DefaultLocation } from "../libs/constants";
 
 const { map, scaleSpeed } = defineProps<{
-  locations: AmbushLocation[];
+  locations: Location[];
   map: ApexMap;
   scaleSpeed: number;
 }>();
@@ -137,7 +139,7 @@ function focus(x: number, y: number) {
 }
 
 function openLocationDetail(
-  id: string,
+  id: number,
   edit?: boolean,
   x?: number,
   y?: number
@@ -163,7 +165,7 @@ function markNewLocation(e: MouseEvent) {
     .done();
   commonStore.pingNewLocation = false;
   focus(coordination[0], coordination[1]);
-  openLocationDetail("new", true, ...coordination);
+  openLocationDetail(DefaultLocation.id, true, ...coordination);
 }
 
 const dragStart = ref<[number, number]>();
@@ -179,10 +181,10 @@ function endDrag(e: MouseEvent) {
   dragStart.value = undefined;
 }
 
-function handleClickLocation(location: AmbushLocation) {
-  if (location._id === "new") return;
+function handleClickLocation(location: Location) {
+  if (location.id === DefaultLocation.id) return;
   focus(location.x, location.y);
-  openLocationDetail(location._id);
+  openLocationDetail(location.id);
 }
 </script>
 

@@ -1,5 +1,7 @@
 import DOMPurify from "dompurify";
 import { marked } from "marked";
+import axios from "axios";
+import { setAgent } from "backend";
 
 export function setup() {
   DOMPurify.setConfig({
@@ -18,4 +20,10 @@ export function setup() {
       },
     },
   });
+
+  setAgent(
+    axios.create({
+      baseURL: import.meta.env.BASE_URL,
+    })
+  );
 }

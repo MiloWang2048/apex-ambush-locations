@@ -1,4 +1,5 @@
-import { AmbushLocation, ApexMap, ApexMapName } from "./types";
+import type { Location } from "backend/dist/client/entities/location";
+import { ApexMap, ApexMapName } from "./types";
 
 export const Maps: Record<ApexMapName, ApexMap> = {
   kings_canyon: {
@@ -33,7 +34,7 @@ export const Maps: Record<ApexMapName, ApexMap> = {
 
 export const DefaultMap = Maps.kings_canyon;
 
-export const testDescription = `# 一级标题
+export const TestDescription = `# 一级标题
 ## 二级标题
 ### 三级标题
 
@@ -64,16 +65,20 @@ export const testDescription = `# 一级标题
 ![这是图片](/Kings_Canyon_MU4.webp)
 `;
 
-export const locationDescriptionPlaceholder = `
+const LocationDescriptionPlaceholder = `
 在此处填写点位描述，支持部分[markdown语法](https://markdown.com.cn)
 `;
 
-export const emptyLocation: AmbushLocation = {
-  name: "",
-  map: "kings_canyon",
-  _id: "",
-  _openid: "",
+export const DefaultLocation: Location = {
+  id: 0,
+  name: "点位标题",
+  description: LocationDescriptionPlaceholder,
+  userId: 0,
   x: 0,
   y: 0,
-  description: "",
+  map: DefaultMap.name,
+};
+
+export const StorageKeys = {
+  jwt: "jwt",
 };

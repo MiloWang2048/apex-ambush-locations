@@ -2,6 +2,7 @@
 import { onMounted, onUnmounted, ref } from "vue";
 import { OffScreenOne } from "@icon-park/vue-next";
 import { useCommonStore } from "../stores/common-store";
+import DisableCursor from "./DisableCursor.vue";
 
 const mouse = ref({ left: -10, top: -10 });
 
@@ -14,6 +15,16 @@ onMounted(() => document.addEventListener("mousemove", update));
 onUnmounted(() => document.removeEventListener("mousemove", update));
 
 const commonStore = useCommonStore();
+
+const hidePointer = import.meta.env.PROD
+  ? `
+<style>
+* {
+  cursor: none !important;
+}
+</style>
+`
+  : "";
 </script>
 
 <template>
@@ -26,13 +37,10 @@ const commonStore = useCommonStore();
     size="24"
     :style="`left: ${mouse.left - 12}px; top: ${mouse.top - 12}px;`"
   />
+  <div v-html="hidePointer"></div>
 </template>
 
-<style>
-* {
-  cursor: none !important;
-}
-
+<style scoped>
 .cursor {
   position: fixed;
   background-color: rgba(255, 255, 255, 0.5);

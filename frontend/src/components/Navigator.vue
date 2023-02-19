@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 import { useRoute, RouterLink } from "vue-router";
-import { DefaultMap, Maps, ApexMap, ApexMapName } from "../libs";
 import { useCommonStore } from "../stores/common-store";
 import { AddFour } from "@icon-park/vue-next";
+import { ApexMap, ApexMapName } from "../libs/types";
+import { Maps, DefaultMap } from "../libs/constants";
 
 const route = useRoute();
 const currentMap = ref<ApexMap>();
@@ -68,11 +69,7 @@ function handleClickUserButton() {
         class="rounded-full bg-blue-500 px-4 hover:bg-blue-400"
         @click="handleClickUserButton"
       >
-        {{
-          commonStore.user
-            ? commonStore.user.email || commonStore.user.username
-            : "登录"
-        }}
+        {{ commonStore.user ? commonStore.user.email : "登录" }}
       </button>
     </div>
   </div>

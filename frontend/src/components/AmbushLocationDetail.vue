@@ -1,33 +1,37 @@
 <script lang="ts" setup>
-import { Maps, throttle, emptyLocation } from "../libs";
+import { throttle } from "../libs/utils";
+import { Maps } from "../libs/constants";
 import { useCommonStore } from "../stores/common-store";
 import { Close, Save, CloseOne, Editor } from "@icon-park/vue-next";
 import { useRoute, useRouter } from "vue-router";
 import DOMPurify from "dompurify";
 import { marked } from "marked";
-import { computed } from "@vue/reactivity";
-
-const { locationId } = defineProps<{ locationId: string }>();
-const commonStore = useCommonStore();
-const location = computed(
-  () =>
-    commonStore.locations.find((location) => location._id === locationId) ??
-    emptyLocation
-);
+import { DefaultLocation } from "../libs/constants";
+import { ApexMapName } from "../libs/types";
+import { computed, watchEffect } from "vue";
 
 const router = useRouter();
 const route = useRoute();
+
+const locationId = parseInt(route.params["locationId"] as string);
+
+const commonStore = useCommonStore();
+const location = computed(
+  () => commonStore.locations.find((location) => location.id === locationId)!
+);
 
 const changeDescriptionThrottled = throttle((e) => {
   location.value.description = (e.target as any)?.value;
 }, 300);
 
-function save() {
-  if (locationId === "new") {
-    commonStore.addLocation(location.value);
+async function save() {
+  if (locationId === DefaultLocation.id) {
+    await commonStore.addLocation(location.value);
   } else {
-    commonStore.updateLocation(location.value);
+    await commonStore.updateLocation(location.value);
   }
+  router.push({ query: {} });
+  commonStore.alert("点位已上传");
 }
 </script>
 
@@ -62,7 +66,7 @@ function save() {
         取 消
       </div>
       <div
-        v-if="!route.query.edit && commonStore.user?.uid === location._openid"
+        v-if="!route.query.edit && commonStore.user?.id === location.userId"
         class="mt-2 w-8 rounded-l-md bg-blue-500 py-2 text-center hover:bg-blue-400"
         @click="router.push({ path: '', query: { edit: 'true' } })"
       >
@@ -106,7 +110,7 @@ function save() {
       <div class="p-4 pr-0">
         <h2 class="text-4xl">{{ location.name }}</h2>
         <p class="my-2 text-gray-400">
-          {{ Maps[location.map].displayName }}
+          {{ Maps[location.map as ApexMapName].displayName }}
           [ {{ location.x.toFixed(2) }}, {{ location.y.toFixed(2) }} ]
         </p>
         <div

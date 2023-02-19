@@ -11,6 +11,7 @@ import locations_add from "./functions/locations/add";
 import locations_delete from "./functions/locations/delete";
 import locations_get from "./functions/locations/get";
 import locations_update from "./functions/locations/update";
+import user_getSelf from "./functions/user/getSelf";
 
 const handlers: HandlerMap = {
   auth_getCaptchaToken,
@@ -20,6 +21,7 @@ const handlers: HandlerMap = {
   locations_delete,
   locations_get,
   locations_update,
+  user_getSelf,
 }
 
 export default handlers;

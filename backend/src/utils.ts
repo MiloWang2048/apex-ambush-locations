@@ -1,8 +1,7 @@
 import crypto from "crypto-js";
-import mysql from "mysql2";
 import log4js from "log4js";
-import { string } from "joi";
 import jwt from "jsonwebtoken";
+import { Logger, QueryRunner } from "typeorm";
 
 export const logger = log4js.getLogger();
 logger.level = process.env.LOG_LEVEL;
@@ -24,3 +23,63 @@ export function verifyJwt(token: string) {
     throw "非法身份标识";
   }
 }
+
+export const dbLogger: Logger = {
+  logQuery: function (
+    query: string,
+    parameters?: any[] | undefined,
+    queryRunner?: QueryRunner | undefined
+  ) {
+    logger.debug("Query:", query);
+    logger.debug("Parameters:", parameters);
+  },
+  logQueryError: function (
+    error: string | Error,
+    query: string,
+    parameters?: any[] | undefined,
+    queryRunner?: QueryRunner | undefined
+  ) {
+    logger.error("Query error:", error);
+    logger.error("Query:", query);
+    logger.error("Parameters:", parameters);
+  },
+  logQuerySlow: function (
+    time: number,
+    query: string,
+    parameters?: any[] | undefined,
+    queryRunner?: QueryRunner | undefined
+  ) {
+    logger.warn("Slow query, time:", time);
+    logger.warn("Query:", query);
+    logger.warn("Parameters:", parameters);
+  },
+  logSchemaBuild: function (
+    message: string,
+    queryRunner?: QueryRunner | undefined
+  ) {
+    logger.info("Schema builder:", message);
+  },
+  logMigration: function (
+    message: string,
+    queryRunner?: QueryRunner | undefined
+  ) {
+    logger.info("Migrations:", message);
+  },
+  log: function (
+    level: "warn" | "info" | "log",
+    message: any,
+    queryRunner?: QueryRunner | undefined
+  ) {
+    switch (level) {
+      case "warn":
+        logger.warn(message);
+        break;
+      case "info":
+        logger.info(message);
+        break;
+      case "log":
+        logger.debug(message);
+        break;
+    }
+  },
+};

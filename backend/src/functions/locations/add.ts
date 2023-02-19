@@ -9,7 +9,6 @@ export default async function (
 ) {
   const userId = verifyJwt(jwt) as string;
 
-  if (!AppDataSource.isInitialized) await AppDataSource.initialize();
   const locationRepo = AppDataSource.getRepository(Location);
 
   let location = new Location();
@@ -18,7 +17,5 @@ export default async function (
   const err = await validate(location);
   if (err.length) throw "数据校验失败";
   const res = await locationRepo.insert(location);
-
-  await AppDataSource.destroy();
   return res;
 }

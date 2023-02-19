@@ -20,7 +20,6 @@ const routes: RouteRecordRaw[] = [
       {
         path: "location/:locationId",
         component: AmbushLocationDetail,
-        props: true,
       },
       {
         path: "location",

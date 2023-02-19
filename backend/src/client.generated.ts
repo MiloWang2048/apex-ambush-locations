@@ -12,6 +12,7 @@ import type locations_add from "./functions/locations/add";
 import type locations_delete from "./functions/locations/delete";
 import type locations_get from "./functions/locations/get";
 import type locations_update from "./functions/locations/update";
+import type user_getSelf from "./functions/user/getSelf";
 
 let agent = axios.create({
   baseURL: "http://localhost:3000",
@@ -33,5 +34,8 @@ export default {
     delete: generateClientHandler<typeof locations_delete>("locations_delete", agent),
     get: generateClientHandler<typeof locations_get>("locations_get", agent),
     update: generateClientHandler<typeof locations_update>("locations_update", agent),
+  },
+  user: {
+    getSelf: generateClientHandler<typeof user_getSelf>("user_getSelf", agent),
   },
 };

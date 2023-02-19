@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import { useRoute } from "vue-router";
 import ApexMap from "../components/ApexMap.vue";
-import { Maps, DefaultMap, ApexMapName } from "../libs";
+import { Maps, DefaultMap } from "../libs/constants";
+import { ApexMapName } from "../libs/types";
 import { useCommonStore } from "../stores/common-store";
 
 const route = useRoute();
