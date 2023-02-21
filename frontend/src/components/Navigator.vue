@@ -5,6 +5,7 @@ import { useCommonStore } from "../stores/common-store";
 import { AddFour } from "@icon-park/vue-next";
 import { ApexMap, ApexMapName } from "../libs/types";
 import { Maps, DefaultMap } from "../libs/constants";
+import { useUserStore } from "../stores/user-store";
 
 const route = useRoute();
 const currentMap = ref<ApexMap>();
@@ -16,9 +17,10 @@ watch(
 );
 const hoverMap = ref<ApexMapName>();
 const commonStore = useCommonStore();
+const userStore = useUserStore();
 
 function handleClickUserButton() {
-  if (!commonStore.user) {
+  if (!userStore.user) {
     commonStore.showLoginPanel = true;
   } else {
     commonStore.showUserProfile = true;
@@ -54,7 +56,7 @@ function handleClickUserButton() {
     <div class="grow"></div>
     <div
       class="flex h-full flex-col justify-center pr-4"
-      v-if="commonStore.user"
+      v-if="userStore.user"
     >
       <button
         class="rounded-full bg-blue-500 px-4 hover:bg-blue-400"
@@ -69,7 +71,7 @@ function handleClickUserButton() {
         class="rounded-full bg-blue-500 px-4 hover:bg-blue-400"
         @click="handleClickUserButton"
       >
-        {{ commonStore.user ? commonStore.user.email : "登录" }}
+        {{ userStore.user ? userStore.user.email : "登录" }}
       </button>
     </div>
   </div>

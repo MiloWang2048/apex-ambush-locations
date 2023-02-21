@@ -10,6 +10,8 @@ import { DefaultLocation } from "../libs/constants";
 import { ApexMapName } from "../libs/types";
 import { computed } from "vue";
 import { useConfirmStore } from "../stores/confirm-store";
+import { useLocationStore } from "../stores/location-store";
+import { useUserStore } from "../stores/user-store";
 
 const router = useRouter();
 const route = useRoute();
@@ -17,8 +19,11 @@ const route = useRoute();
 const locationId = computed(() => +route.params["locationId"]);
 
 const commonStore = useCommonStore();
+const locationStore = useLocationStore();
+const userStore = useUserStore();
+
 const location = computed(() =>
-  commonStore.locations.find((location) => location.id === locationId.value)
+  locationStore.locations.find((location) => location.id === locationId.value)
 );
 
 const changeDescriptionThrottled = throttle((e) => {
@@ -29,9 +34,9 @@ const changeDescriptionThrottled = throttle((e) => {
 async function save() {
   if (!location.value) return;
   if (locationId.value === DefaultLocation.id) {
-    await commonStore.addLocation(location.value);
+    await locationStore.addLocation(location.value);
   } else {
-    await commonStore.updateLocation(location.value);
+    await locationStore.updateLocation(location.value);
   }
   router.push({ query: {} });
   commonStore.alert("点位已上传");
@@ -44,7 +49,7 @@ async function onDelete() {
     text: "此操作不可恢复！",
   });
   if (!confirmed) return;
-  await commonStore.removeLocation(location.value.id);
+  await locationStore.removeLocation(location.value.id);
   if (confirmed) router.push(`/${commonStore.mapName}`);
 }
 </script>
@@ -81,7 +86,7 @@ async function onDelete() {
         取 消
       </div>
       <div
-        v-if="!route.query.edit && commonStore.user?.id === location.userId"
+        v-if="!route.query.edit && userStore.user?.id === location.userId"
         class="mt-2 w-8 rounded-l-md bg-blue-500 py-2 text-center hover:bg-blue-400"
         @click="router.push({ path: '', query: { edit: 'true' } })"
       >
