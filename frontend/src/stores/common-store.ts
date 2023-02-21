@@ -79,7 +79,17 @@ export const useCommonStore = defineStore("common", () => {
 
   async function addLocation(location: Location) {
     if (!jwt.value) return;
-    await backend.locations.add(jwt.value, location);
+    const id = await backend.locations.add(jwt.value, location);
+    await fetchLocations(mapName.value);
+    if (id) {
+      await router.push(`/${mapName.value}/location/${id}`);
+    } else {
+      await router.push(`/${mapName.value}`);
+    }
+  }
+  async function removeLocation(locationId: number) {
+    if (!jwt.value) return;
+    await backend.locations.delete(jwt.value, locationId);
     await fetchLocations(mapName.value);
   }
 
@@ -100,5 +110,6 @@ export const useCommonStore = defineStore("common", () => {
     mapName,
     updateLocation,
     addLocation,
+    removeLocation,
   };
 });

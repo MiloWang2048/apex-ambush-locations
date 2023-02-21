@@ -10,6 +10,7 @@ import auth_login from "./functions/auth/login";
 import locations_add from "./functions/locations/add";
 import locations_delete from "./functions/locations/delete";
 import locations_get from "./functions/locations/get";
+import locations_getMine from "./functions/locations/getMine";
 import locations_update from "./functions/locations/update";
 import user_getSelf from "./functions/user/getSelf";
 
@@ -20,6 +21,7 @@ const handlers: HandlerMap = {
   locations_add,
   locations_delete,
   locations_get,
+  locations_getMine,
   locations_update,
   user_getSelf,
 }
