@@ -15,10 +15,10 @@
   - [x] 编辑点位
 - 其他功能
 
-  - [ ] 访问控制
-    - [ ] 用户 profile 页面
+  - [x] 访问控制
+    - [x] 用户 profile 页面
       - [x] 登出
-      - [ ] 我标记的点位
+      - [x] 我标记的点位
     - [x] 登录状态指示器
     - [x] 登录、注册
   - [ ] 内容审核机制
@@ -39,3 +39,4 @@
 
 - [ ] `monorepo`下`@types/node`对前端项目的影响和使用`yarn workspace nohoist`的解决方案
 - [ ] vue sfc 中，使用`@vue/reactivity`的响应式 api 时，模板编译器不能正确解包 ref
+- [ ] tsc和node在解析`exports`和`main`时的优先级问题
