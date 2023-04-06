@@ -4,8 +4,10 @@ import { useCommonStore } from "../stores/common-store";
 import { Close } from "@icon-park/vue-next";
 import backend from "backend";
 import type { Captcha } from "backend/dist/client/functions/auth/getCaptchaToken";
+import { useUserStore } from "../stores/user-store";
 
 const commonStore = useCommonStore();
+const userStore = useUserStore();
 
 const email = ref("");
 const userCaptchaAnswer = ref("");
@@ -80,7 +82,7 @@ async function submit() {
       emailVerificationUserAnswer.value,
       emailVerifyToken.value
     );
-    commonStore.jwt = jwt;
+    userStore.jwt = jwt;
     commonStore.showLoginPanel = false;
     email.value = "";
     userCaptchaAnswer.value = "";

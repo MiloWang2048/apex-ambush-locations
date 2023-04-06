@@ -7,15 +7,16 @@ export default async function (
   jwt: string,
   _location: Omit<Location, "id" | "userId">
 ) {
-  const userId = verifyJwt(jwt) as string;
+  const userId = +verifyJwt(jwt);
 
   const locationRepo = AppDataSource.getRepository(Location);
 
   let location = new Location();
   Object.assign(location, _location);
-  location.userId = +userId;
+  location.userId = userId;
   const err = await validate(location);
   if (err.length) throw "数据校验失败";
   const res = await locationRepo.insert(location);
-  return res;
+
+  return res.raw?.["insertId"] as number | undefined;
 }

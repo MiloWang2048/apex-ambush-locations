@@ -6,6 +6,7 @@ import { useCommonStore } from "./stores/common-store";
 import GlobalAlert from "./components/GlobalAlert.vue";
 import LoginPanel from "./components/LoginPanel.vue";
 import UserProfile from "./components/UserProfile.vue";
+import ConfirmBox from "./components/ConfirmBox.vue";
 
 const commonStore = useCommonStore();
 </script>
@@ -18,6 +19,7 @@ const commonStore = useCommonStore();
     <GlobalAlert />
     <LoginPanel />
     <UserProfile />
+    <ConfirmBox />
   </div>
 </template>
 
